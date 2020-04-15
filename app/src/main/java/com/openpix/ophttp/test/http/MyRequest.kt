@@ -1,8 +1,9 @@
 package com.openpix.ophttp.test.http
 
+import com.openpix.ophttp.OPHttp
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
-import com.pix.http.Rest
+import com.openpix.ophttp.retrofit.Rest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -16,6 +17,12 @@ import io.reactivex.schedulers.Schedulers
  * <author> <time> <version> <desc>
  */
 object MyRequest {
+
+    var opHttp:OPHttp? = null
+
+    fun register(opHttp: OPHttp?) {
+        this.opHttp = opHttp
+    }
     /**
      * 取得用户信息
      * @param httpResponse
@@ -24,7 +31,7 @@ object MyRequest {
         uid: String,
         fields:String, httpResponse: OPResponse<Map<String, UserInfo>>
     ) {
-        Rest.getRestApi(MyApi::class.java).getUserInfo(uid,fields)
+        Rest.ophttp(opHttp).getRestApi(MyApi::class.java).getUserInfo(uid,fields)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(httpResponse)

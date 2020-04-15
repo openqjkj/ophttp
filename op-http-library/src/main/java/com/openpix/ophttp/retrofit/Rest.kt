@@ -1,4 +1,4 @@
-package com.pix.http
+package com.openpix.ophttp.retrofit
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.openpix.ophttp.OPHttp
@@ -24,17 +24,27 @@ object Rest {
      *
      */
     private val restMap = HashMap<String,Any>()
-    private val client = OPHttp.okHttpClient;
-    private val retrofit = Retrofit.Builder()
-            .baseUrl(OPHttp.domain)
+    private var opHttp:OPHttp?=null
+    private var retrofit:Retrofit? = null
+
+    /**
+     * OPHttp对象
+     */
+    fun ophttp(opHttp: OPHttp?): Rest {
+        Rest.opHttp = opHttp
+        retrofit =  Retrofit.Builder()
+            .baseUrl(opHttp?.domain)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(client)
+            .client(opHttp?.okHttpClient)
             .build()
+
+        return this
+    }
 
     fun <T> getRestApi(service: Class<T>): T {
         if (null == restMap[service.canonicalName]) {
-            val restAPI = retrofit.create(service)
+            val restAPI = retrofit?.create(service)
             if (null != service.canonicalName && null != restAPI) {
                 restMap.put(service.canonicalName.toString(), restAPI)
             }

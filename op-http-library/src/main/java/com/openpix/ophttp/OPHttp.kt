@@ -1,5 +1,6 @@
 package com.openpix.ophttp
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.openpix.ophttp.callback.ISignCallback
 import okhttp3.Interceptor
@@ -18,7 +19,7 @@ import kotlin.collections.HashMap
  * History:
  * <author> <time> <version> <desc>
  */
-object OPHttp {
+class OPHttp {
     private val TAG = "OPHttp"
     var okHttpClient: OkHttpClient? = null
     private var clientBuild = OkHttpClient.Builder()
@@ -32,15 +33,16 @@ object OPHttp {
     /**
      * 设置Http请求头
      */
-    fun setHeaders(httpHeader: IHttpHeader) {
-        clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(httpHeader.getHeader()))
+    private fun setHeaders(httpHeader: IHttpHeader) {
+        clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(this, httpHeader.getHeader()))
         okHttpClient = clientBuild.connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)
             .readTimeout(60 * 1000, TimeUnit.MILLISECONDS)
             .build()
     }
 
     // 签名拦截器
-    private class AddHeaderAndParamsInterceptor(var headers:Map<String,String>): Interceptor {
+    private class AddHeaderAndParamsInterceptor(private val opHttp: OPHttp, var headers:Map<String,String>): Interceptor {
+        private val TAG = "ParamsInterceptor"
         override fun intercept(chain: Interceptor.Chain?): Response {
             var oldRequest = chain?.request()
 
@@ -61,9 +63,9 @@ object OPHttp {
             var signUrlBuilder
                     = oldRequest?.url()?.newBuilder()?.scheme(oldRequest?.url()?.scheme())
                 ?.host(oldRequest?.url().host())
-                ?.addQueryParameter("r", genRandomString())
-            var sign= OPHttp.signCallback?.onSign(params, headers)
-            if(null != OPHttp.signCallback && null != sign) {
+                ?.addQueryParameter("r", opHttp.genRandomString())
+            var sign= opHttp.signCallback?.onSign(params, headers)
+            if(null != opHttp.signCallback && null != sign) {
                 signUrlBuilder = signUrlBuilder?.addQueryParameter("sign",sign)
             }
             var newRequest = oldRequest?.newBuilder()?.method(oldRequest?.method(),oldRequest?.body())
@@ -76,7 +78,10 @@ object OPHttp {
         }
     }
 
-    fun cancleRequest() {
+    /**
+     * 取消所有请求
+     */
+    fun cancleAllRequest() {
         okHttpClient?.dispatcher()?.cancelAll()
     }
 
@@ -95,5 +100,40 @@ object OPHttp {
             buf.append((rand + 'a'.toInt()).toChar())
         }
         return buf.toString()
+    }
+
+    /**
+     * OPHttp 建造器
+     */
+    public final class Builder {
+        val opHttp = OPHttp()
+
+        /**
+         * 设置请求头
+         */
+        fun setHeaders(headers:IHttpHeader):Builder {
+            opHttp.setHeaders(headers)
+            return this
+        }
+
+        /**
+         * 设置签名回调
+         */
+        fun setSignCallback(signCallback: ISignCallback):Builder {
+            opHttp.signCallback = signCallback
+            return this
+        }
+
+        /**
+         * 设置域名
+         */
+        fun domain(domain:String):Builder {
+            opHttp.domain = domain
+            return this
+        }
+
+        fun build():OPHttp {
+            return opHttp
+        }
     }
 }

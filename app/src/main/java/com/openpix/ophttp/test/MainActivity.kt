@@ -13,6 +13,7 @@ import com.openpix.ophttp.test.http.MyRequest
 import com.openpix.ophttp.test.http.SignHelper
 
 class MainActivity : AppCompatActivity() {
+    var myOPHttp:OPHttp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +23,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initHttp() {
-        OPHttp.setHeaders(HttpConfig())
-        OPHttp.domain=MyApi.DOMAIN
-        OPHttp.signCallback = object: ISignCallback {
+        var signCallback = object: ISignCallback {
             override fun onSign(
                 params: Map<String, String>,
                 headers: Map<String, String>
@@ -32,6 +31,9 @@ class MainActivity : AppCompatActivity() {
                 return SignHelper.getSing(params, headers)
             }
         }
+        myOPHttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(signCallback).domain(MyApi.DOMAIN).build()
+        MyRequest.register(myOPHttp)
+
     }
 
     private fun reqUserInfo() {
