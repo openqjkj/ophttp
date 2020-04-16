@@ -11,7 +11,6 @@ import okhttp3.Credentials;
  * 实现Http网络请求的参数配置
  */
 public class HttpConfig implements IHttpHeader {
-	private static final String REFERER = "http://tiantian.qq.com";
 
 	@Override
 	public HashMap<String, String> getHeader() {
@@ -23,11 +22,8 @@ public class HttpConfig implements IHttpHeader {
 		String SV = android.os.Build.VERSION.RELEASE;// 操作系统版本
 		headers.put("sy", SV);// 系统版本 如：2.0，2.2，2.2.1，3.1，3.1.1，3.1.2
 		headers.put("mobile", MOBILE);// 设备型号
-		headers.put("Referer", REFERER);
-		headers.put("signtype",2 + "");
 		long timestamp = System.currentTimeMillis();
 		headers.put("ts",timestamp + "");
-		headers.put("cleartext", +timestamp + ""); //明文校验
 		headers.put("Authorization", Credentials.basic("user", "123456"));
 		return headers;
 	}

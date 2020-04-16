@@ -17,7 +17,6 @@ import io.reactivex.schedulers.Schedulers
  * <author> <time> <version> <desc>
  */
 object MyRequest {
-
     var opHttp:OPHttp? = null
 
     fun register(opHttp: OPHttp?) {

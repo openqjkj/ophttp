@@ -10,7 +10,7 @@ package com.openpix.ophttp.test.http
  * <author> <time> <version> <desc>
  */
 object SignHelper {
-    fun getSing(params:Map<String, String>, header:Map<String, String>):String? {
+    fun getSign(params:Map<String, String>, header:Map<String, String>):String? {
         return "sign helper"
     }
 }
