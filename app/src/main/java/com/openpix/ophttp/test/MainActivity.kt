@@ -19,13 +19,14 @@ class MainActivity : AppCompatActivity() {
         reqUserInfo()
     }
     private fun reqUserInfo() {
-        MyRequest.getUserInfo("898210", "all", object:OPResponse<Map<String, UserInfo>>() {
+        MyRequest.getUserInfo("67", "all", object:OPResponse<Map<String, UserInfo>>() {
             override fun onSuccess(t: Map<String, UserInfo>?) {
-                LogUtils.d(t?.keys.toString() + "===")
+                LogUtils.d("t:" + t)
             }
 
             override fun onFailed(code: Int, msg: String?) {
                 super.onFailed(code, msg)
+                LogUtils.d("msg:" + msg)
             }
         })
     }

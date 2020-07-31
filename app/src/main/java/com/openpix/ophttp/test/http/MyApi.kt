@@ -16,7 +16,7 @@ import retrofit2.http.Query
  */
 interface MyApi {
     companion object {
-          const val DOMAIN = "http://pixtang.com/cgi/"
+          const val DOMAIN = "https://pixtang.com/cgi/"
     }
 
     /**
