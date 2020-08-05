@@ -10,5 +10,5 @@ package com.openpix.ophttp
  * <author> <time> <version> <desc>
  */
 interface IHttpHeader {
-    fun getHeader():Map<String, String>
+    fun getHeader():MutableMap<String, String>
 }

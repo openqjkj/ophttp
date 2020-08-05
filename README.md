@@ -60,17 +60,21 @@ public class HttpConfig implements IHttpHeader {
 }
 ```
 
-如有需要增加签名，初始化时设置`ISignCallback`即可，这里是在请求参数里增加一个`sign`的字段。
+如有需要在请求前对参数和请求头进行处理，初始化时设置`IRequestPreCallback`即可，
 
-回调中会回调给用户所有请求头和请求参数的列表数据，方便用户签名使用。
+例如：这里是在请求参数里增加一个签名`sign`的字段。
+
+回调中会回调给用户所有请求头和请求参数的列表数据.
 
 范例：`SignHelper.kt`
 
 ```kotlin
 object SignHelper {
-    fun getSign(params:Map<String, String>, header:Map<String, String>):String? {
-        return "sign helper"
+    fun getSign(params:MutableMap<String, String>, header:MutableMap<String, String>){
+        params.put("sign", "paramsign")
+        header.put("sign", "headersign")
     }
+}
 }
 ```
 
@@ -116,16 +120,17 @@ class AppAplication:Application() {
         initHttp()
     }
 
+
     /**
      * 初始化http
      */
     fun initHttp() {
-        var signCallback = object:ISignCallback {
-            override fun onSign(params: Map<String, String>, headers: Map<String, String>): String? {
-                return SignHelper.getSign(headers, params)
+        var requestPreCallback = object:IRequestPreCallback {
+            override fun onRequestPre(params: MutableMap<String, String>, headers: MutableMap<String, String>) {
+                SignHelper.getSign(headers, params)
             }
         }
-        var ophttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(signCallback).domain(MyApi.DOMAIN).build()
+        var ophttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(requestPreCallback).domain(MyApi.DOMAIN).build()
         MyRequest.register(ophttp)
     }
 }

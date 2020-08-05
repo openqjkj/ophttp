@@ -1,8 +1,7 @@
 package com.openpix.ophttp
 
-import android.annotation.SuppressLint
 import android.util.Log
-import com.openpix.ophttp.callback.ISignCallback
+import com.openpix.ophttp.callback.IRequestPreCallback
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -24,10 +23,12 @@ class OPHttp {
     var okHttpClient: OkHttpClient? = null
     private var clientBuild = OkHttpClient.Builder()
 
+    var isOuputLog:Boolean = false
+
     /**
      * 签名的回调，用于给请求参数内增加sign选项
      */
-    var signCallback: ISignCallback?=null
+    var requestPreCallback: IRequestPreCallback?=null
     var domain:String?=null
 
     /**
@@ -41,7 +42,7 @@ class OPHttp {
     }
 
     // 签名拦截器
-    private class AddHeaderAndParamsInterceptor(private val opHttp: OPHttp, var headers:Map<String,String>): Interceptor {
+    private class AddHeaderAndParamsInterceptor(private val opHttp: OPHttp, var headers:MutableMap<String,String>): Interceptor {
         private val TAG = "ParamsInterceptor"
         override fun intercept(chain: Interceptor.Chain?): Response {
             var oldRequest = chain?.request()
@@ -50,13 +51,17 @@ class OPHttp {
             var params = HashMap<String,String>()
             // 取得所有签名key
             var paramsNames = oldRequest?.url()?.queryParameterNames()
-            Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url() + ",params:" + params.toString())
+            if(opHttp.isOuputLog) {
+                Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url() + ",params:" + params.toString())
+            }
             // 遍历签名，输入map
             if (null != paramsNames) {
                 for (pName in paramsNames) {
                     var pValue: String = oldRequest?.url()?.queryParameter(pName) ?: continue
                     params[pName] = pValue
-                    Log.d(TAG,"requestParams:key=$pName,value:${params[pName]}")
+                    if(opHttp.isOuputLog) {
+                        Log.d(TAG,"requestParams:key=$pName,value:${params[pName]}")
+                    }
                 }
             }
             // 添加公共参数
@@ -64,9 +69,10 @@ class OPHttp {
                     = oldRequest?.url()?.newBuilder()?.scheme(oldRequest?.url()?.scheme())
                 ?.host(oldRequest?.url().host())
                 ?.addQueryParameter("r", opHttp.genRandomString())
-            var sign= opHttp.signCallback?.onSign(params, headers)
-            if(null != opHttp.signCallback && null != sign) {
-                signUrlBuilder = signUrlBuilder?.addQueryParameter("sign",sign)
+            // 请求前回调
+            opHttp.requestPreCallback?.onRequestPre(params, headers)
+            if(opHttp.isOuputLog) {
+                Log.d(TAG,"request:Params:$params,header:${headers}")
             }
             var newRequest = oldRequest?.newBuilder()?.method(oldRequest?.method(),oldRequest?.body())
                 ?.url(signUrlBuilder?.build())
@@ -119,8 +125,8 @@ class OPHttp {
         /**
          * 设置签名回调
          */
-        fun setSignCallback(signCallback: ISignCallback):Builder {
-            opHttp.signCallback = signCallback
+        fun setSignCallback(requestPreCallback: IRequestPreCallback):Builder {
+            opHttp.requestPreCallback = requestPreCallback
             return this
         }
 

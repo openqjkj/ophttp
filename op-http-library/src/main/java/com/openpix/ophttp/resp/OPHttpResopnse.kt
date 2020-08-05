@@ -21,7 +21,6 @@ abstract class OPHttpResopnse<T> : Consumer<BaseModel<T>> {
     protected abstract fun onFailed(code: Int?, msg: String?)
 
     override fun accept(t: BaseModel<T>?) {
-        Log.d(TAG, "accept()=========================================")
         if (t?.state == 0) {
             onSuccess(t?.content)
         } else {

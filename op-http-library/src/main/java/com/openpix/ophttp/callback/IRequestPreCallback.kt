@@ -9,6 +9,6 @@ package com.openpix.ophttp.callback
  * History:
  * <author> <time> <version> <desc>
  */
-interface ISignCallback {
-    fun onSign(params:Map<String, String>, headers:Map<String, String>):String?
+interface IRequestPreCallback {
+    fun onRequestPre(params:MutableMap<String, String>, headers:MutableMap<String, String>)
 }
