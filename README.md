@@ -161,6 +161,20 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+# Release Version Note
 
+## 1.0.0
+
+first version issue
+
+## 1.0.1
+
+2020-08-05 update
+
+## 1.0.2
+
+2020-08-22 update
+
+Change `Observable` to `Single` request.
 
 
