@@ -21,4 +21,8 @@ class BaseModel<T> {
     var state: Int = 0
     var message: String? = null
     var content: T? = null
+    override fun toString(): String {
+        return "BaseModel(state=$state, message=$message, content=$content)"
+    }
+
 }

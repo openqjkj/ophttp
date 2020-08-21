@@ -3,6 +3,7 @@ package com.openpix.ophttp.test.http
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.resp.BaseModel
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -23,5 +24,5 @@ interface MyApi {
      * 取得用户信息
      */
     @POST("user/getUserInfo")
-    fun getUserInfo(@Query("targetUid")uid:String, @Query("fields")fields:String):Observable<BaseModel<Map<String, UserInfo>>>
+    fun getUserInfo(@Query("targetUid")uid:String, @Query("fields")fields:String):Single<BaseModel<Map<String, UserInfo>>>
 }

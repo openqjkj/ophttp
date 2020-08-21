@@ -4,6 +4,8 @@ import androidx.annotation.NonNull
 import java.net.ConnectException
 
 import io.reactivex.Observer
+import io.reactivex.Single
+import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 import retrofit2.HttpException
 
@@ -17,26 +19,12 @@ import retrofit2.HttpException
  * History:
  * <author> <time> <version> <desc>
  */
-abstract class OPResponse<T> : Observer<BaseModel<T>> {
-
-    protected abstract fun onSuccess(t: T?)
+abstract class OPResponse<T> : SingleObserver<BaseModel<T>> {
 
     open fun onFailed(code: Int, msg: String?) {}
 
     override fun onSubscribe(@NonNull d: Disposable) {
         // 比如显示加载中对话框
-    }
-
-    override fun onComplete() {
-        // 比如隐藏加载中对话框
-    }
-
-    override fun onNext(baseModel: BaseModel<T>) {
-        if (baseModel.state == 0) {
-            onSuccess(baseModel.content)
-        } else {
-            onFailed(baseModel.state, baseModel.message)
-        }
     }
 
     override fun onError(t: Throwable) {
