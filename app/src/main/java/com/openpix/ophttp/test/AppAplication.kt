@@ -33,6 +33,7 @@ class AppAplication:Application() {
             }
         }
         var ophttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(requestPreCallback).domain(MyApi.DOMAIN).build()
+        ophttp.isOuputLog = true
         MyRequest.register(ophttp)
     }
 }

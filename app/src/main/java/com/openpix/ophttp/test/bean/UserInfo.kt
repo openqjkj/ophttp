@@ -11,4 +11,8 @@ package com.openpix.ophttp.test.bean
  */
 class UserInfo {
     var id:String? = null
+    override fun toString(): String {
+        return "UserInfo(id=$id)"
+    }
+
 }

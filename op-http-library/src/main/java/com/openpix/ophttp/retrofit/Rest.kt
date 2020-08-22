@@ -5,6 +5,7 @@ import com.openpix.ophttp.OPHttp
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.*
 
 /**
@@ -35,6 +36,7 @@ object Rest {
         retrofit =  Retrofit.Builder()
             .baseUrl(opHttp?.domain)
             .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(opHttp?.okHttpClient)
             .build()

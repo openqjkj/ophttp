@@ -4,6 +4,7 @@ import com.openpix.ophttp.OPHttp
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.retrofit.Rest
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
