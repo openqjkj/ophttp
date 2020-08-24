@@ -177,4 +177,13 @@ first version issue
 
 Change `Observable` to `Single` request.
 
+## 1.0.3
+
+2020-08-24
+
+Add String style response
+
+Format logger
+
+
 
