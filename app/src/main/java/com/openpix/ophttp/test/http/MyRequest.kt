@@ -1,6 +1,8 @@
 package com.openpix.ophttp.test.http
 
+import com.openpix.logutils.LogUtils
 import com.openpix.ophttp.OPHttp
+import com.openpix.ophttp.resp.BaseModel
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.retrofit.Rest
@@ -29,11 +31,23 @@ object MyRequest {
      */
     fun getUserInfo(
         uid: String,
-        fields:String, httpResponse: OPResponse<Map<String, UserInfo>>
+        fields:String, httpResponse: OPResponse<BaseModel<Map<String, UserInfo>>>
     ) {
         Rest.ophttp(opHttp).getRestApi(MyApi::class.java).getUserInfo(uid,fields)
+            .map {
+                LogUtils.d("map...........")
+                it
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(httpResponse)
+    }
+
+    fun getUserInfoString(uid:String, filelds:String, httpResponse: OPResponse<String>) {
+        Rest.ophttp(opHttp).getRestApi(MyApi::class.java).getUserInfoString(uid,filelds)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(httpResponse)
+
     }
 }

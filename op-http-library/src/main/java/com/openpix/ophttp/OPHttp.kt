@@ -2,9 +2,14 @@ package com.openpix.ophttp
 
 import android.util.Log
 import com.openpix.ophttp.callback.IRequestPreCallback
+import com.openpix.ophttp.log.OPHttpLogger
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
+import com.orhanobut.logger.PrettyFormatStrategy
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
@@ -24,6 +29,10 @@ class OPHttp {
     private var clientBuild = OkHttpClient.Builder()
 
     var isOuputLog:Boolean = false
+        set(value) {
+            Log.d(TAG,"isOutputLog-----> " + value)
+            initLogger(value)
+        }
 
     /**
      * 签名的回调，用于给请求参数内增加sign选项
@@ -36,28 +45,31 @@ class OPHttp {
      */
     private fun setHeaders(httpHeader: IHttpHeader) {
         clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(this, httpHeader.getHeader()))
+        var log = HttpLoggingInterceptor(OPHttpLogger());
+        log.level = HttpLoggingInterceptor.Level.BODY
         okHttpClient = clientBuild.connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)
             .readTimeout(60 * 1000, TimeUnit.MILLISECONDS)
+            .addNetworkInterceptor(log)
             .build()
     }
 
     // 签名拦截器
     private class AddHeaderAndParamsInterceptor(private val opHttp: OPHttp, var headers:MutableMap<String,String>): Interceptor {
         private val TAG = "ParamsInterceptor"
-        override fun intercept(chain: Interceptor.Chain?): Response {
-            var oldRequest = chain?.request()
+        override fun intercept(chain: Interceptor.Chain): Response {
+            var oldRequest = chain.request()
 
             // 签名
             var params = HashMap<String,String>()
             // 取得所有签名key
-            var paramsNames = oldRequest?.url()?.queryParameterNames()
+            var paramsNames = oldRequest?.url?.queryParameterNames
             if(opHttp.isOuputLog) {
-                Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url() + ",params:" + params.toString())
+                Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url + ",params:" + params.toString())
             }
             // 遍历签名，输入map
             if (null != paramsNames) {
                 for (pName in paramsNames) {
-                    var pValue: String = oldRequest?.url()?.queryParameter(pName) ?: continue
+                    var pValue: String = oldRequest?.url?.queryParameter(pName) ?: continue
                     params[pName] = pValue
                     if(opHttp.isOuputLog) {
                         Log.d(TAG,"requestParams:key=$pName,value:${params[pName]}")
@@ -66,21 +78,23 @@ class OPHttp {
             }
             // 添加公共参数
             var signUrlBuilder
-                    = oldRequest?.url()?.newBuilder()?.scheme(oldRequest?.url()?.scheme())
-                ?.host(oldRequest?.url().host())
+                    = oldRequest?.url?.newBuilder()?.scheme(oldRequest?.url?.scheme)
+                ?.host(oldRequest?.url.host)
                 ?.addQueryParameter("r", opHttp.genRandomString())
             // 请求前回调
             opHttp.requestPreCallback?.onRequestPre(params, headers)
             if(opHttp.isOuputLog) {
                 Log.d(TAG,"request:Params:$params,header:${headers}")
             }
-            var newRequest = oldRequest?.newBuilder()?.method(oldRequest?.method(),oldRequest?.body())
-                ?.url(signUrlBuilder?.build())
+            var newRequest = signUrlBuilder?.build()?.let {
+                oldRequest?.newBuilder()?.method(oldRequest?.method, oldRequest?.body)
+                    ?.url(it)
+            }
             // 增加公共头
             for((k,v) in headers) {
                 newRequest?.addHeader(k,v)
             }
-            return chain?.proceed(newRequest?.build())!!
+            return chain.proceed(newRequest?.build())
         }
     }
 
@@ -88,7 +102,7 @@ class OPHttp {
      * 取消所有请求
      */
     fun cancleAllRequest() {
-        okHttpClient?.dispatcher()?.cancelAll()
+        okHttpClient?.dispatcher?.cancelAll()
     }
 
     //生成随机字符串
@@ -141,5 +155,19 @@ class OPHttp {
         fun build():OPHttp {
             return opHttp
         }
+    }
+
+    fun initLogger(isOpen:Boolean) {
+        var formatStrategy = PrettyFormatStrategy.newBuilder()
+            .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
+            .methodCount(0)         // (Optional) How many method line to show. Default 2
+            .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+            .tag("OPHttp")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+            .build();
+        Logger.addLogAdapter(object: AndroidLogAdapter(formatStrategy) {
+            override fun isLoggable(priority: Int, tag: String?): Boolean {
+                return isOpen
+            }
+        })
     }
 }

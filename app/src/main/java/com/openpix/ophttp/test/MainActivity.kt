@@ -7,28 +7,43 @@ import com.openpix.ophttp.resp.BaseModel
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.test.http.MyRequest
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        reqUserInfo()
+        btn_req.setOnClickListener {
+            reqUserInfo()
+        }
     }
     private fun reqUserInfo() {
         LogUtils.d()
-        MyRequest.getUserInfo("67", "all", object:OPResponse<Map<String, UserInfo>>() {
-            override fun onSuccess(value: BaseModel<Map<String, UserInfo>>?) {
-                value?.also {
-                    if(0 == it.state) {
-                        LogUtils.d(it.toString())
-                    }
+        MyRequest.getUserInfo("67", "all", object:OPResponse<BaseModel<Map<String,UserInfo>>>(){
+            override fun onSuccess(t: BaseModel<Map<String, UserInfo>>) {
+                LogUtils.d()
+            }
+
+            override fun onError(t: Throwable) {
+                super.onError(t)
+                LogUtils.e(t)
+            }
+
+        })
+
+        MyRequest.getUserInfoString("67","all",object:OPResponse<String>() {
+            override fun onSuccess(t: String) {
+                t.run {
+                    LogUtils.d(this)
                 }
             }
 
-            override fun onFailed(code: Int, msg: String?) {
-                super.onFailed(code, msg)
-                LogUtils.d("msg:" + msg)
+            override fun onError(t: Throwable) {
+                super.onError(t)
+                LogUtils.e(t)
             }
+
         })
+
     }
 }

@@ -18,9 +18,14 @@ import com.openpix.ophttp.test.http.SignHelper
  * <author> <time> <version> <desc>
  */
 class AppAplication:Application() {
+    lateinit var ophttp:OPHttp
+    companion object {
+        lateinit var INSTANCE:AppAplication;
+    }
     override fun onCreate() {
         super.onCreate()
         initHttp()
+        INSTANCE = this
     }
 
     /**
@@ -32,7 +37,7 @@ class AppAplication:Application() {
                 SignHelper.getSign(headers, params)
             }
         }
-        var ophttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(requestPreCallback).domain(MyApi.DOMAIN).build()
+        ophttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(requestPreCallback).domain(MyApi.DOMAIN).build()
         ophttp.isOuputLog = true
         MyRequest.register(ophttp)
     }

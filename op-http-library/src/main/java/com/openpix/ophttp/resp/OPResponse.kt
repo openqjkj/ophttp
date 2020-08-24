@@ -19,7 +19,7 @@ import retrofit2.HttpException
  * History:
  * <author> <time> <version> <desc>
  */
-abstract class OPResponse<T> : SingleObserver<BaseModel<T>> {
+abstract class OPResponse<T> : SingleObserver<T> {
 
     open fun onFailed(code: Int, msg: String?) {}
 
