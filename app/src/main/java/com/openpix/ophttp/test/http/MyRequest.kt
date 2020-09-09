@@ -2,6 +2,7 @@ package com.openpix.ophttp.test.http
 
 import com.openpix.logutils.LogUtils
 import com.openpix.ophttp.OPHttp
+import com.openpix.ophttp.ext.async
 import com.openpix.ophttp.resp.BaseModel
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
@@ -37,10 +38,7 @@ object MyRequest {
             .map {
                 LogUtils.d("map...........")
                 it
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(httpResponse)
+            }.async().subscribe(httpResponse)
     }
 
     fun getUserInfoString(uid:String, filelds:String, httpResponse: OPResponse<String>) {
