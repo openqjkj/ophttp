@@ -185,5 +185,11 @@ Add String style response
 
 Format logger
 
+## 1.0.4
+
+2020-09-09
+
+Add `async()` externtion
+
 
 
