@@ -26,6 +26,11 @@ interface MyApi {
     @POST("user/getUserInfo")
     fun getUserInfo(@Query("targetUid")uid:String, @Query("fields")fields:String):Single<BaseModel<Map<String, UserInfo>>>
 
+    /**
+     * 取得用户信息
+     */
+    @POST("user/getUserInfo")
+    suspend fun getUserInfoCoroutine(@Query("targetUid")uid:String, @Query("fields")fields:String):BaseModel<Map<String, UserInfo>>
 
 
     @POST("user/getUserInfo")

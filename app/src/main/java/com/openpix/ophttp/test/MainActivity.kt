@@ -2,14 +2,19 @@ package com.openpix.ophttp.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.openpix.logutils.LogUtils
 import com.openpix.ophttp.resp.BaseModel
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.test.http.MyRequest
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
+    val mainScope by lazy { MainScope() }
+    var contentData: LiveData<String> =  liveData {  }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,5 +50,10 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainScope.cancel()
     }
 }

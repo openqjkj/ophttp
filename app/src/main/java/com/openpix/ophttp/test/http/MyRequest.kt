@@ -43,8 +43,7 @@ object MyRequest {
 
     fun getUserInfoString(uid:String, filelds:String, httpResponse: OPResponse<String>) {
         Rest.ophttp(opHttp).getRestApi(MyApi::class.java).getUserInfoString(uid,filelds)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .async()
             .subscribe(httpResponse)
 
     }

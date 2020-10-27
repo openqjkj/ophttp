@@ -39,6 +39,8 @@ class OPHttp {
      */
     var requestPreCallback: IRequestPreCallback?=null
     var domain:String?=null
+    var connectTimeOut :Long= 60 * 1000
+    var readTimeOut :Long= 60 * 1000
 
     /**
      * 设置Http请求头
@@ -47,8 +49,8 @@ class OPHttp {
         clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(this, httpHeader.getHeader()))
         var log = HttpLoggingInterceptor(OPHttpLogger());
         log.level = HttpLoggingInterceptor.Level.BODY
-        okHttpClient = clientBuild.connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)
-            .readTimeout(60 * 1000, TimeUnit.MILLISECONDS)
+        okHttpClient = clientBuild.connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+            .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
             .addNetworkInterceptor(log)
             .build()
     }
@@ -80,7 +82,6 @@ class OPHttp {
             var signUrlBuilder
                     = oldRequest?.url?.newBuilder()?.scheme(oldRequest?.url?.scheme)
                 ?.host(oldRequest?.url.host)
-                ?.addQueryParameter("r", opHttp.genRandomString())
             // 请求前回调
             opHttp.requestPreCallback?.onRequestPre(params, headers)
             if(opHttp.isOuputLog) {
@@ -105,23 +106,6 @@ class OPHttp {
         okHttpClient?.dispatcher?.cancelAll()
     }
 
-    //生成随机字符串
-    private fun genRandomString(): String {
-        val random = Random(System.currentTimeMillis())
-        var rand: Int
-
-        var len = random.nextInt(10)
-        if (len < 4) {
-            len = 4
-        }
-        val buf = StringBuilder()
-        for (i in 0 until len) {
-            rand = random.nextInt(26)
-            buf.append((rand + 'a'.toInt()).toChar())
-        }
-        return buf.toString()
-    }
-
     /**
      * OPHttp 建造器
      */
@@ -139,7 +123,7 @@ class OPHttp {
         /**
          * 设置签名回调
          */
-        fun setSignCallback(requestPreCallback: IRequestPreCallback):Builder {
+        fun setRequestPreCallbackCallback(requestPreCallback: IRequestPreCallback):Builder {
             opHttp.requestPreCallback = requestPreCallback
             return this
         }
@@ -149,6 +133,16 @@ class OPHttp {
          */
         fun domain(domain:String):Builder {
             opHttp.domain = domain
+            return this
+        }
+
+        fun setConnectTimeout(connectTimeout:Long): Builder {
+            opHttp.connectTimeOut = connectTimeout
+            return this
+        }
+
+        fun setReadTimeout(readTimeout:Long): Builder {
+            opHttp.readTimeOut = readTimeout
             return this
         }
 

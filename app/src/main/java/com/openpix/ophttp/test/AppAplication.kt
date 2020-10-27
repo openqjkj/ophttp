@@ -37,7 +37,12 @@ class AppAplication:Application() {
                 SignHelper.getSign(headers, params)
             }
         }
-        ophttp = OPHttp.Builder().setHeaders(HttpConfig()).setSignCallback(requestPreCallback).domain(MyApi.DOMAIN).build()
+        ophttp = OPHttp.Builder()
+            .setHeaders(HttpConfig())
+            .setRequestPreCallbackCallback(requestPreCallback)
+            .setConnectTimeout(60 * 1000)
+            .setReadTimeout(60 * 1000)
+            .domain(MyApi.DOMAIN).build()
         ophttp.isOuputLog = true
         MyRequest.register(ophttp)
     }
