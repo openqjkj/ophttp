@@ -4,7 +4,7 @@ http库封装
 # ophttp库引入
 
 ```gradle
-    implementation 'com.openpix:ophttp:1.0.0'
+    implementation 'com.openpix:ophttp:1.0.6'
 ```
 
 # 请求接口定义
@@ -192,4 +192,15 @@ Format logger
 Add `async()` externtion
 
 
+## 1.0.5
+
+2020-09-09
+
+add set timeout function, modify http request pre callback
+
+## 1.0.6
+
+2020-10-27
+
+minSDK 16 to 14
 
