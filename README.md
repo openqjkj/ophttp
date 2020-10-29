@@ -194,7 +194,7 @@ Add `async()` externtion
 
 ## 1.0.5
 
-2020-09-09
+2020-10-27
 
 add set timeout function, modify http request pre callback
 
@@ -203,4 +203,10 @@ add set timeout function, modify http request pre callback
 2020-10-27
 
 minSDK 16 to 14
+
+## 1.0.7
+
+2020-10-29
+
+fix new parameter no set bug.
 
