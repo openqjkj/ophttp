@@ -84,12 +84,17 @@ class OPHttp {
                 ?.host(oldRequest?.url.host)
             // 请求前回调
             opHttp.requestPreCallback?.onRequestPre(params, headers)
+
             if(opHttp.isOuputLog) {
                 Log.d(TAG,"request:Params:$params,header:${headers}")
+            }
+            for (param in params) {
+                signUrlBuilder.setQueryParameter(param.key, param.value)
             }
             var newRequest = signUrlBuilder?.build()?.let {
                 oldRequest?.newBuilder()?.method(oldRequest?.method, oldRequest?.body)
                     ?.url(it)
+
             }
             // 增加公共头
             for((k,v) in headers) {
