@@ -43,7 +43,7 @@ class AppAplication:Application() {
             .setConnectTimeout(60 * 1000)
             .setReadTimeout(60 * 1000)
             .domain(MyApi.DOMAIN).build()
-        ophttp.isOuputLog = true
         MyRequest.register(ophttp)
+//        OPHttp.isOuputLog = true
     }
 }

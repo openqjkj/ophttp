@@ -28,11 +28,30 @@ class OPHttp {
     var okHttpClient: OkHttpClient? = null
     private var clientBuild = OkHttpClient.Builder()
 
-    var isOuputLog:Boolean = false
-        set(value) {
-            Log.d(TAG,"isOutputLog-----> " + value)
-            initLogger(value)
+    companion object {
+        private var isInitLog = false
+        var isOuputLog:Boolean = false
+            set(value) {
+                Log.d(OPHttp::class.java.simpleName,"isOutputLog-----> " + value)
+                initLogger(value)
+            }
+
+        fun initLogger(isOpen:Boolean) {
+            if(isInitLog) return
+            var formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
+                .methodCount(0)         // (Optional) How many method line to show. Default 2
+                .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+                .tag("OPHttp")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .build();
+            Logger.addLogAdapter(object: AndroidLogAdapter(formatStrategy) {
+                override fun isLoggable(priority: Int, tag: String?): Boolean {
+                    return isOpen
+                }
+            })
+            isInitLog = true
         }
+    }
 
     /**
      * 签名的回调，用于给请求参数内增加sign选项
@@ -65,7 +84,7 @@ class OPHttp {
             var params = HashMap<String,String>()
             // 取得所有签名key
             var paramsNames = oldRequest?.url?.queryParameterNames
-            if(opHttp.isOuputLog) {
+            if(isOuputLog) {
                 Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url + ",params:" + params.toString())
             }
             // 遍历签名，输入map
@@ -73,7 +92,7 @@ class OPHttp {
                 for (pName in paramsNames) {
                     var pValue: String = oldRequest?.url?.queryParameter(pName) ?: continue
                     params[pName] = pValue
-                    if(opHttp.isOuputLog) {
+                    if(isOuputLog) {
                         Log.d(TAG,"requestParams:key=$pName,value:${params[pName]}")
                     }
                 }
@@ -85,7 +104,7 @@ class OPHttp {
             // 请求前回调
             opHttp.requestPreCallback?.onRequestPre(params, headers)
 
-            if(opHttp.isOuputLog) {
+            if(isOuputLog) {
                 Log.d(TAG,"request:Params:$params,header:${headers}")
             }
             for (param in params) {
@@ -156,17 +175,4 @@ class OPHttp {
         }
     }
 
-    fun initLogger(isOpen:Boolean) {
-        var formatStrategy = PrettyFormatStrategy.newBuilder()
-            .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
-            .methodCount(0)         // (Optional) How many method line to show. Default 2
-            .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
-            .tag("OPHttp")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
-            .build();
-        Logger.addLogAdapter(object: AndroidLogAdapter(formatStrategy) {
-            override fun isLoggable(priority: Int, tag: String?): Boolean {
-                return isOpen
-            }
-        })
-    }
 }
