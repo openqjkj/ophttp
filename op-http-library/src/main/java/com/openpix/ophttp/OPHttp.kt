@@ -10,7 +10,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.HashMap
 
@@ -30,7 +29,7 @@ class OPHttp {
 
     companion object {
         private var isInitLog = false
-        var isOuputLog:Boolean = false
+        var isOutputLog:Boolean = false
             set(value) {
                 Log.d(OPHttp::class.java.simpleName,"isOutputLog-----> " + value)
                 initLogger(value)
@@ -84,7 +83,7 @@ class OPHttp {
             var params = HashMap<String,String>()
             // 取得所有签名key
             var paramsNames = oldRequest?.url?.queryParameterNames
-            if(isOuputLog) {
+            if(isOutputLog) {
                 Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url + ",params:" + params.toString())
             }
             // 遍历签名，输入map
@@ -92,7 +91,7 @@ class OPHttp {
                 for (pName in paramsNames) {
                     var pValue: String = oldRequest?.url?.queryParameter(pName) ?: continue
                     params[pName] = pValue
-                    if(isOuputLog) {
+                    if(isOutputLog) {
                         Log.d(TAG,"requestParams:key=$pName,value:${params[pName]}")
                     }
                 }
@@ -104,7 +103,7 @@ class OPHttp {
             // 请求前回调
             opHttp.requestPreCallback?.onRequestPre(params, headers)
 
-            if(isOuputLog) {
+            if(isOutputLog) {
                 Log.d(TAG,"request:Params:$params,header:${headers}")
             }
             for (param in params) {

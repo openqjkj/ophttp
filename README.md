@@ -210,3 +210,8 @@ minSDK 16 to 14
 
 fix new parameter no set bug.
 
+## 1.0.8
+
+2020-11-1
+
+fix mutilable output log issue, update rxandroid version

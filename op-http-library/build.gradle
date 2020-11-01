@@ -38,8 +38,8 @@ publish {
     userOrg = 'openpix'//bintray.com用户名
     groupId = 'com.openpix'//jcenter上的路径
     artifactId = 'ophttp'//项目名称
-    publishVersion = '1.0.7'//版本号
-    desc = 'fix new parameter no set bug'//描述，不重要
+    publishVersion = '1.0.8'//版本号
+    desc = 'fix mutilable output log issue, update rxandroid version '//描述，不重要
     website = 'https://github.com/openpix/ophttp'//网站，最好有，不重要
 }
 
