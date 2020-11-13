@@ -57,7 +57,7 @@ class OPHttp {
      * 签名的回调，用于给请求参数内增加sign选项
      */
     private var requestPreCallback: IRequestPreCallback?=null
-    private var domain:String?=null
+    var domain:String?=null
     private var connectTimeOut :Long= 60 * 1000
     private var readTimeOut :Long= 60 * 1000
 

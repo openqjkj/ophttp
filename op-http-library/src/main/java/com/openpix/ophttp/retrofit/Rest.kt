@@ -6,6 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.lang.IllegalStateException
 import java.util.*
 
 /**
@@ -32,14 +33,18 @@ object Rest {
      * OPHttp对象
      */
     fun ophttp(opHttp: OPHttp?): Rest {
-        Rest.opHttp = opHttp
-        retrofit =  Retrofit.Builder()
-            .baseUrl(opHttp?.domain)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(opHttp?.okHttpClient)
-            .build()
+        this.opHttp = opHttp
+        this.opHttp?.let {op->
+            op.domain?.let {
+                retrofit =  Retrofit.Builder()
+                    .baseUrl(it)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .client(opHttp?.okHttpClient)
+                    .build()
+            }?: throw IllegalStateException("opHttp.domain is null.")
+        }?:throw IllegalStateException("opHttp is null.")
 
         return this
     }
