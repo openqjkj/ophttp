@@ -10,8 +10,8 @@ package com.openpix.ophttp.test.http
  * <author> <time> <version> <desc>
  */
 object SignHelper {
-    fun getSign(params:MutableMap<String, String>, header:MutableMap<String, String>){
-        params.put("sign", "paramsign")
-        header.put("sign", "headersign")
+    fun getSign(params: MutableMap<String, String>?, header: MutableMap<String, String>?){
+        params?.put("sign", "paramsign")
+        header?.put("sign", "headersign")
     }
 }

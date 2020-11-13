@@ -3,6 +3,7 @@ package com.openpix.ophttp
 import android.util.Log
 import com.openpix.ophttp.callback.IRequestPreCallback
 import com.openpix.ophttp.log.OPHttpLogger
+import com.openpix.ophttp.retrofit.Rest
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
@@ -55,26 +56,45 @@ class OPHttp {
     /**
      * 签名的回调，用于给请求参数内增加sign选项
      */
-    var requestPreCallback: IRequestPreCallback?=null
-    var domain:String?=null
-    var connectTimeOut :Long= 60 * 1000
-    var readTimeOut :Long= 60 * 1000
+    private var requestPreCallback: IRequestPreCallback?=null
+    private var domain:String?=null
+    private var connectTimeOut :Long= 60 * 1000
+    private var readTimeOut :Long= 60 * 1000
+
+    /**
+     * 网络请求头
+     */
+    private var header: IHttpHeader? = null
+
+    /**
+     * retrofit对象封装
+     */
+    private lateinit var rest: Rest
 
     /**
      * 设置Http请求头
      */
-    private fun setHeaders(httpHeader: IHttpHeader) {
-        clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(this, httpHeader.getHeader()))
+    fun setHeaders(httpHeader: IHttpHeader) {
+        this.header = header;
+    }
+
+    private fun create() {
+        clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(this))
         var log = HttpLoggingInterceptor(OPHttpLogger());
         log.level = HttpLoggingInterceptor.Level.BODY
         okHttpClient = clientBuild.connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
             .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
             .addNetworkInterceptor(log)
             .build()
+        rest = Rest.ophttp(this)
+    }
+
+    fun <T> getRestApi(service: Class<T>): T {
+        return rest?.getRestApi(service)
     }
 
     // 签名拦截器
-    private class AddHeaderAndParamsInterceptor(private val opHttp: OPHttp, var headers:MutableMap<String,String>): Interceptor {
+    private class AddHeaderAndParamsInterceptor(private val opHttp: OPHttp): Interceptor {
         private val TAG = "ParamsInterceptor"
         override fun intercept(chain: Interceptor.Chain): Response {
             var oldRequest = chain.request()
@@ -101,10 +121,10 @@ class OPHttp {
                     = oldRequest?.url?.newBuilder()?.scheme(oldRequest?.url?.scheme)
                 ?.host(oldRequest?.url.host)
             // 请求前回调
-            opHttp.requestPreCallback?.onRequestPre(params, headers)
+            opHttp.requestPreCallback?.onRequestPre(params,opHttp.header?.getHeader()?:null)
 
             if(isOutputLog) {
-                Log.d(TAG,"request:Params:$params,header:${headers}")
+                Log.d(TAG,"request:Params:$params,header:${opHttp.header?.getHeader()?:null}")
             }
             for (param in params) {
                 signUrlBuilder.setQueryParameter(param.key, param.value)
@@ -115,8 +135,10 @@ class OPHttp {
 
             }
             // 增加公共头
-            for((k,v) in headers) {
-                newRequest?.addHeader(k,v)
+            opHttp.header?.let { head->
+                for((k,v) in head.getHeader()) {
+                    newRequest?.addHeader(k,v)
+                }
             }
             return chain.proceed(newRequest?.build())
         }
@@ -170,6 +192,7 @@ class OPHttp {
         }
 
         fun build():OPHttp {
+            opHttp.create()
             return opHttp
         }
     }

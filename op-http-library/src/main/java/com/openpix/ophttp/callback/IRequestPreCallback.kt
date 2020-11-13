@@ -10,5 +10,5 @@ package com.openpix.ophttp.callback
  * <author> <time> <version> <desc>
  */
 interface IRequestPreCallback {
-    fun onRequestPre(params:MutableMap<String, String>, headers:MutableMap<String, String>)
+    fun onRequestPre(params:MutableMap<String, String>?, headers:MutableMap<String, String>?)
 }

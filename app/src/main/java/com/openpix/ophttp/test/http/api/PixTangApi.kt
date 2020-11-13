@@ -1,4 +1,4 @@
-package com.openpix.ophttp.test.http
+package com.openpix.ophttp.test.http.api
 
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.resp.BaseModel
@@ -15,7 +15,7 @@ import retrofit2.http.Query
  * Description: 接口定义
  * History:
  */
-interface MyApi {
+interface PixTangApi {
     companion object {
           const val DOMAIN = "https://pixtang.com/cgi/"
     }

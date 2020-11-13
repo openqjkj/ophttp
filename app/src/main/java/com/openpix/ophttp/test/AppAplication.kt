@@ -4,7 +4,7 @@ import android.app.Application
 import com.openpix.ophttp.OPHttp
 import com.openpix.ophttp.callback.IRequestPreCallback
 import com.openpix.ophttp.test.http.HttpConfig
-import com.openpix.ophttp.test.http.MyApi
+import com.openpix.ophttp.test.http.api.PixTangApi
 import com.openpix.ophttp.test.http.MyRequest
 import com.openpix.ophttp.test.http.SignHelper
 
@@ -33,7 +33,10 @@ class AppAplication:Application() {
      */
     fun initHttp() {
         var requestPreCallback = object:IRequestPreCallback {
-            override fun onRequestPre(params: MutableMap<String, String>, headers: MutableMap<String, String>) {
+            override fun onRequestPre(params: MutableMap<String, String>?, headers: MutableMap<String, String>?) {
+                /**
+                 * 这里示例处理需要在请求时添加签名的情况
+                 */
                 SignHelper.getSign(headers, params)
             }
         }
@@ -42,7 +45,7 @@ class AppAplication:Application() {
             .setRequestPreCallbackCallback(requestPreCallback)
             .setConnectTimeout(60 * 1000)
             .setReadTimeout(60 * 1000)
-            .domain(MyApi.DOMAIN).build()
+            .domain(PixTangApi.DOMAIN).build()
         MyRequest.register(ophttp)
 //        OPHttp.isOuputLog = true
     }

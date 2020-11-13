@@ -7,9 +7,7 @@ import com.openpix.ophttp.resp.BaseModel
 import com.openpix.ophttp.resp.OPResponse
 import com.openpix.ophttp.test.bean.UserInfo
 import com.openpix.ophttp.retrofit.Rest
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.openpix.ophttp.test.http.api.PixTangApi
 
 /**
  * Copyright (C), 2020-2020, guagua
@@ -34,7 +32,7 @@ object MyRequest {
         uid: String,
         fields:String, httpResponse: OPResponse<BaseModel<Map<String, UserInfo>>>
     ) {
-        Rest.ophttp(opHttp).getRestApi(MyApi::class.java).getUserInfo(uid,fields)
+        Rest.ophttp(opHttp).getRestApi(PixTangApi::class.java).getUserInfo(uid,fields)
             .map {
                 LogUtils.d("map...........")
                 it
@@ -42,7 +40,7 @@ object MyRequest {
     }
 
     fun getUserInfoString(uid:String, filelds:String, httpResponse: OPResponse<String>) {
-        Rest.ophttp(opHttp).getRestApi(MyApi::class.java).getUserInfoString(uid,filelds)
+        Rest.ophttp(opHttp).getRestApi(PixTangApi::class.java).getUserInfoString(uid,filelds)
             .async()
             .subscribe(httpResponse)
 
