@@ -215,3 +215,9 @@ fix new parameter no set bug.
 2020-11-1
 
 fix mutilable output log issue, update rxandroid version
+
+## 1.0.9
+
+2020-11-18
+
+support automatically replace request header
