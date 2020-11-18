@@ -38,8 +38,8 @@ publish {
     userOrg = 'openpix'//bintray.com用户名
     groupId = 'com.openpix'//jcenter上的路径
     artifactId = 'ophttp'//项目名称
-    publishVersion = '1.0.9'//版本号
-    desc = 'support automatically replace request header' //描述，不重要
+    publishVersion = '1.0.10'//版本号
+    desc = 'change okhttp version to 3.12.1' //描述，不重要
     website = 'https://github.com/openpix/ophttp'//网站，最好有，不重要
 }
 
@@ -48,7 +48,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'

@@ -103,14 +103,14 @@ class OPHttp {
             // 签名
             var params = HashMap<String,String>()
             // 取得所有签名key
-            var paramsNames = oldRequest?.url?.queryParameterNames
+            var paramsNames = oldRequest?.url()?.queryParameterNames()
             if(isOutputLog) {
-                Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url + ",params:" + params.toString())
+                Log.d(TAG,"AddHeaderAndParamsInterceptor(),url:" + oldRequest?.url() + ",params:" + params.toString())
             }
             // 遍历签名，输入map
             if (null != paramsNames) {
                 for (pName in paramsNames) {
-                    var pValue: String = oldRequest?.url?.queryParameter(pName) ?: continue
+                    var pValue: String = oldRequest?.url()?.queryParameter(pName) ?: continue
                     params[pName] = pValue
                     if(isOutputLog) {
                         Log.d(TAG,"requestParams:key=$pName,value:${params[pName]}")
@@ -119,8 +119,8 @@ class OPHttp {
             }
             // 添加公共参数
             var signUrlBuilder
-                    = oldRequest?.url?.newBuilder()?.scheme(oldRequest?.url?.scheme)
-                ?.host(oldRequest?.url.host)
+                    = oldRequest?.url()?.newBuilder()?.scheme(oldRequest?.url()?.scheme())
+                ?.host(oldRequest?.url().host())
             // 请求前回调
             opHttp.requestPreCallback?.onRequestPre(params,opHttp.header?.getHeader()?:null)
 
@@ -128,10 +128,10 @@ class OPHttp {
                 Log.d(TAG,"request:Params:$params,header:${opHttp.header?.getHeader()?:null}")
             }
             for (param in params) {
-                signUrlBuilder.setQueryParameter(param.key, param.value)
+                signUrlBuilder?.setQueryParameter(param.key, param.value)
             }
             var newRequest = signUrlBuilder?.build()?.let {
-                oldRequest?.newBuilder()?.method(oldRequest?.method, oldRequest?.body)
+                oldRequest?.newBuilder()?.method(oldRequest?.method(), oldRequest?.body())
                     ?.url(it)
 
             }
@@ -149,7 +149,7 @@ class OPHttp {
      * 取消所有请求
      */
     fun cancleAllRequest() {
-        okHttpClient?.dispatcher?.cancelAll()
+        okHttpClient?.dispatcher()?.cancelAll()
     }
 
     /**

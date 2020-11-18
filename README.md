@@ -4,7 +4,7 @@ http库封装
 # ophttp库引入
 
 ```gradle
-    implementation 'com.openpix:ophttp:1.0.6'
+    implementation 'com.openpix:ophttp:1.0.10'
 ```
 
 # 请求接口定义
@@ -221,3 +221,9 @@ fix mutilable output log issue, update rxandroid version
 2020-11-18
 
 support automatically replace request header
+
+## 1.0.10
+
+2020-11-18
+
+change okhttp version to 3.12.1
