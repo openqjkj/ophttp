@@ -47,6 +47,6 @@ class AppAplication:Application() {
             .setReadTimeout(60 * 1000)
             .domain(PixTangApi.DOMAIN).build()
         MyRequest.register(ophttp)
-//        OPHttp.isOuputLog = true
+        OPHttp.isOutputLog = true
     }
 }

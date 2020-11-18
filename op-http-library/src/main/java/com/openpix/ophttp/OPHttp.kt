@@ -32,6 +32,7 @@ class OPHttp {
         private var isInitLog = false
         var isOutputLog:Boolean = false
             set(value) {
+                field = value
                 Log.d(OPHttp::class.java.simpleName,"isOutputLog-----> " + value)
                 initLogger(value)
             }
@@ -75,7 +76,7 @@ class OPHttp {
      * 设置Http请求头
      */
     fun setHeaders(httpHeader: IHttpHeader) {
-        this.header = header;
+        this.header = httpHeader
     }
 
     private fun create() {
