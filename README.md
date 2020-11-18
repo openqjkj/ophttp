@@ -227,3 +227,15 @@ support automatically replace request header
 2020-11-18
 
 change okhttp version to 3.12.1
+
+## 1.0.10
+
+2020-11-18
+
+change okhttp version to 3.12.1
+
+## 1.0.11
+
+2020-11-18
+
+add no logger interceptor `create(hasLogger: Boolean)` function

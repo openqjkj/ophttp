@@ -1,5 +1,6 @@
 package com.openpix.ophttp
 
+import android.graphics.Path
 import android.util.Log
 import com.openpix.ophttp.callback.IRequestPreCallback
 import com.openpix.ophttp.log.OPHttpLogger
@@ -87,6 +88,27 @@ class OPHttp {
             .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
             .addNetworkInterceptor(log)
             .build()
+        rest = Rest.ophttp(this)
+    }
+
+    /**
+     * no logger selection create function.
+     */
+    private fun create(hasLogger:Boolean) {
+        clientBuild.addInterceptor(AddHeaderAndParamsInterceptor(this))
+        if(hasLogger) {
+            var log = HttpLoggingInterceptor(OPHttpLogger());
+            log.level = HttpLoggingInterceptor.Level.BODY
+            okHttpClient = clientBuild.connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .addNetworkInterceptor(log)
+                .build()
+        }
+        else {
+            okHttpClient = clientBuild.connectTimeout(connectTimeOut, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeOut, TimeUnit.MILLISECONDS)
+                .build()
+        }
         rest = Rest.ophttp(this)
     }
 
@@ -194,6 +216,11 @@ class OPHttp {
 
         fun build():OPHttp {
             opHttp.create()
+            return opHttp
+        }
+
+        fun build(hasLogger:Boolean):OPHttp {
+            opHttp.create(hasLogger)
             return opHttp
         }
     }
