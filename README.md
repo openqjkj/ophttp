@@ -1,13 +1,13 @@
 # ophttp
 http库封装
 
-# ophttp库引入
 
+## ophttp库引入
 ```gradle
     implementation 'com.openpix:ophttp:1.0.10'
 ```
 
-# 请求接口定义
+## 请求接口定义
 
 范例:`myApi.kt`
 
@@ -29,7 +29,7 @@ interface MyApi {
 
 请求接口定义: `getUserInfo()`
 
-# 请求头定义
+## 请求头定义
 
 请求头定义需要继承自`IhttpHeader接口
 
@@ -78,7 +78,7 @@ object SignHelper {
 }
 ```
 
-# 请求定义
+## 请求定义
 
 请求需要`OPHttp`对象，也就是总入口配置的对象，下面初始化时会生成这个对象。
 
@@ -107,7 +107,7 @@ object MyRequest {
 }
 ```
 
-# 初始化
+## 初始化
 
 建议在自定义`Application`类中初始化
 
@@ -136,7 +136,7 @@ class AppAplication:Application() {
 }
 ```
 
-# 请求
+## 请求
 
 范例：`MainActivity.kt`
 
@@ -161,23 +161,23 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-# Release Version Note
+## Release Version Note
 
-## 1.0.0
+### 1.0.0
 
 first version issue
 
-## 1.0.1
+### 1.0.1
 
 2020-08-05 update
 
-## 1.0.2
+### 1.0.2
 
 2020-08-22 update
 
 Change `Observable` to `Single` request.
 
-## 1.0.3
+### 1.0.3
 
 2020-08-24
 
@@ -185,57 +185,63 @@ Add String style response
 
 Format logger
 
-## 1.0.4
+### 1.0.4
 
 2020-09-09
 
 Add `async()` externtion
 
 
-## 1.0.5
+### 1.0.5
 
 2020-10-27
 
 add set timeout function, modify http request pre callback
 
-## 1.0.6
+### 1.0.6
 
 2020-10-27
 
 minSDK 16 to 14
 
-## 1.0.7
+### 1.0.7
 
 2020-10-29
 
 fix new parameter no set bug.
 
-## 1.0.8
+### 1.0.8
 
 2020-11-1
 
 fix mutilable output log issue, update rxandroid version
 
-## 1.0.9
+### 1.0.9
 
 2020-11-18
 
 support automatically replace request header
 
-## 1.0.10
+### 1.0.10
 
 2020-11-18
 
 change okhttp version to 3.12.1
 
-## 1.0.10
+### 1.0.10
 
 2020-11-18
 
 change okhttp version to 3.12.1
 
-## 1.0.11
+### 1.0.11
 
 2020-11-18
 
 add no logger interceptor `create(hasLogger: Boolean)` function
+
+### 1.0.13
+
+2020-11-19
+
+add UploadRequestBody class

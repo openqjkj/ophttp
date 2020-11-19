@@ -38,8 +38,8 @@ publish {
     userOrg = 'openpix'//bintray.com用户名
     groupId = 'com.openpix'//jcenter上的路径
     artifactId = 'ophttp'//项目名称
-    publishVersion = '1.0.11'//版本号
-    desc = 'add no logger interceptor create function' //描述，不重要
+    publishVersion = '1.0.13'//版本号
+    desc = 'add UploadRequestBody class' //描述，不重要
     website = 'https://github.com/openpix/ophttp'//网站，最好有，不重要
 }
 
