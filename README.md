@@ -4,7 +4,7 @@ http库封装
 
 ## ophttp库引入
 ```gradle
-    implementation 'com.openpix:ophttp:1.0.10'
+    implementation 'com.qjkj:ophttp:1.0.10'
 ```
 
 ## 请求接口定义
