@@ -35,12 +35,12 @@ android {
 }
 
 publish {
-    userOrg = 'openqijukeji'//bintray.com用户名
+    userOrg = 'openqjkj'//bintray.com用户名
     groupId = 'com.qjkj'//jcenter上的路径
     artifactId = 'ophttp'//项目名称
     publishVersion = '1.0.13'//版本号
     desc = 'add UploadRequestBody class' //描述，不重要
-    website = 'https://github.com/openqijukeji/ophttp'//网站，最好有，不重要
+    website = 'https://github.com/openqjkj/ophttp'//网站，最好有，不重要
 }
 
 
