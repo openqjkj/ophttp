@@ -1,10 +1,12 @@
+<a href="https://bintray.com/openqjkj/maven/ophttp"><img src="https://img.shields.io/badge/jcenter-1.0.13-green"></a>
+
 # ophttp
 http库封装
 
 
 ## ophttp库引入
 ```gradle
-    implementation 'com.qjkj:ophttp:1.0.10'
+    implementation 'com.qjkj:ophttp:1.0.13'
 ```
 
 ## 请求接口定义
