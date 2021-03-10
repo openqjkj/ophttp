@@ -190,7 +190,7 @@ class OPHttp {
         /**
          * 设置签名回调
          */
-        fun setRequestPreCallbackCallback(requestPreCallback: IRequestPreCallback): Builder {
+        fun setRequestPreCallback(requestPreCallback: IRequestPreCallback): Builder {
             opHttp.requestPreCallback = requestPreCallback
             return this
         }

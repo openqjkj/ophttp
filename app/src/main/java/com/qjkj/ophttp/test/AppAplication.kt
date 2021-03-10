@@ -42,7 +42,7 @@ class AppAplication:Application() {
         }
         ophttp = OPHttp.Builder()
             .setHeaders(HttpConfig())
-            .setRequestPreCallbackCallback(requestPreCallback)
+            .setRequestPreCallback(requestPreCallback)
             .setConnectTimeout(60 * 1000)
             .setReadTimeout(60 * 1000)
             .domain(PixTangApi.DOMAIN).build()

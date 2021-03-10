@@ -1,4 +1,4 @@
-<a href="https://bintray.com/openqjkj/maven/ophttp"><img src="https://img.shields.io/badge/jcenter-1.0.13-green"></a>
+<a href="https://bintray.com/openqjkj/maven/ophttp"><img src="https://img.shields.io/badge/jcenter-1.0.13-green"></a> <img src="https://img.shields.io/badge/MinSDK-14-red" /><img src="https://img.shields.io/badge/-androidx-blue" />
 
 # ophttp
 http库封装
@@ -177,32 +177,6 @@ first version issue
 
 2020-08-22 update
 
-Change `Observable` to `Single` request.
-
-### 1.0.3
-
-2020-08-24
-
-Add String style response
-
-Format logger
-
-### 1.0.4
-
-2020-09-09
-
-Add `async()` externtion
-
-
-### 1.0.5
-
-2020-10-27
-
-add set timeout function, modify http request pre callback
-
-### 1.0.6
-
-2020-10-27
 
 minSDK 16 to 14
 
