@@ -1,10 +1,11 @@
-<a href="https://bintray.com/openqjkj/maven/ophttp"><img src="https://img.shields.io/badge/jcenter-1.0.13-green"></a> <img src="https://img.shields.io/badge/MinSDK-14-red" /><img src="https://img.shields.io/badge/-androidx-blue" />
+<a href="https://bintray.com/openqjkj/maven/ophttp"><img src="https://img.shields.io/badge/jcenter-1.0.13-green"></a>&nbsp;<img src="https://img.shields.io/badge/MinSDK-14-red" />&nbsp;<img src="https://img.shields.io/badge/-androidx-blue" />
 
 # ophttp
-http库封装
 
+http 库封装
 
-## ophttp库引入
+## ophttp 库引入
+
 ```gradle
     implementation 'com.qjkj:ophttp:1.0.13'
 ```
@@ -33,7 +34,7 @@ interface MyApi {
 
 ## 请求头定义
 
-请求头定义需要继承自`IhttpHeader接口
+请求头定义需要继承自`IhttpHeader 接口
 
 范例:`HttpConfig.kt`
 
@@ -89,7 +90,7 @@ object SignHelper {
 ```kotlin
 object MyRequest {
     var opHttp:OPHttp? = null
-    
+
     fun register(opHttp: OPHttp?) {
         this.opHttp = opHttp
     }
@@ -177,7 +178,6 @@ first version issue
 
 2020-08-22 update
 
-
 minSDK 16 to 14
 
 ### 1.0.7
@@ -221,3 +221,4 @@ add no logger interceptor `create(hasLogger: Boolean)` function
 2020-11-19
 
 add UploadRequestBody class
+
