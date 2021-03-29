@@ -1,5 +1,6 @@
 package com.qjkj.ophttp
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.qjkj.ophttp.callback.IRequestPreCallback
 import com.qjkj.ophttp.log.OPHttpLogger
@@ -24,11 +25,11 @@ import kotlin.collections.HashMap
  * <author> <time> <version> <desc>
  */
 class OPHttp {
-    private val TAG = "OPHttp"
     var okHttpClient: OkHttpClient? = null
     private var clientBuild = OkHttpClient.Builder()
 
     companion object {
+        val TAG = OPHttp.javaClass.simpleName
         private var isInitLog = false
         var isOutputLog:Boolean = false
             set(value) {
@@ -39,12 +40,16 @@ class OPHttp {
 
         fun initLogger(isOpen:Boolean) {
             if(isInitLog) return
+            if(isOpen) {
+                Log.d(OPHttp.TAG, "initLogger(),isOpen:$isOpen")
+            }
             var formatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
                 .methodCount(0)         // (Optional) How many method line to show. Default 2
                 .methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
                 .tag("OPHttp")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
-                .build();
+                .build()
+            Logger.clearLogAdapters()
             Logger.addLogAdapter(object: AndroidLogAdapter(formatStrategy) {
                 override fun isLoggable(priority: Int, tag: String?): Boolean {
                     return isOpen

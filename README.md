@@ -223,3 +223,9 @@ add no logger interceptor `create(hasLogger: Boolean)` function
 2020-11-19
 
 add UploadRequestBody class
+
+### 1.0.14
+
+2021-03-29
+
+add clear log, modify callback function
